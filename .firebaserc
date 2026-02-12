@@ -1,5 +1,7 @@
 {
-  "projects": {},
+  "projects": {
+    "default": "n8n-automation-v1-falkon"
+  },
   "targets": {},
   "etags": {}
 }
