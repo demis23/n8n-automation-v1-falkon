@@ -25,7 +25,7 @@
       enable = true;
       previews = {
         # This defines a preview that exposes the n8n port
-        n8n-web = {
+        web = {
           command = ["docker-compose" "up"];
           manager = "web";
           env = {
