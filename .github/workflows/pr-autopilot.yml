@@ -1,0 +1,30 @@
+# Installed into every repo as .github/workflows/pr-autopilot.yml by rollout.sh.
+# pull_request_target runs the version of this file from the BASE branch,
+# so a PR cannot rewrite its own reviewer.
+# workflow_run / status wake the cheap merge-when-green job once CI finishes,
+# so no runner sits idle waiting for CI. rollout.sh fills in the CI workflow names.
+name: PR Autopilot
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+  status:
+
+concurrency:
+  group: pr-autopilot-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.event.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request_target' }}
+
+jobs:
+  autopilot:
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      checks: read
+      statuses: read
+    uses: demis23/pr-autopilot/.github/workflows/review.yml@main
+    secrets: inherit
+    # Optional overrides:
+    # with:
+    #   max_changed_lines: 400
+    #   min_confidence: 0.9
